@@ -1094,6 +1094,8 @@ dependencies = [
  "assert_cmd",
  "clap",
  "dialoguer",
+ "env_logger",
+ "log",
  "predicates",
  "reqwest",
  "serde",

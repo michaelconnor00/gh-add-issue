@@ -3,6 +3,8 @@ use std::process::{Command, Stdio};
 /// Inner implementation — accepts the command and args so tests can
 /// substitute a known-good or known-bad command instead of calling `gh`.
 pub(crate) fn check_auth_with_command(cmd: &str, args: &[&str]) -> Result<(), String> {
+    log::debug!("Checking auth with command: {cmd} {args:?}");
+
     let status = Command::new(cmd)
         .args(args)
         .stdout(Stdio::null())
@@ -11,8 +13,10 @@ pub(crate) fn check_auth_with_command(cmd: &str, args: &[&str]) -> Result<(), St
         .map_err(|e| format!("Failed to run `{cmd}`: {e}"))?;
 
     if status.success() {
+        log::info!("GitHub authentication verified.");
         Ok(())
     } else {
+        log::warn!("GitHub authentication check failed (exit code: {:?}).", status.code());
         Err("Not authenticated with GitHub. Run `gh auth login` and try again.".to_string())
     }
 }
