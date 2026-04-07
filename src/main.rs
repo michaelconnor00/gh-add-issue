@@ -1,3 +1,9 @@
+mod auth;
+
 fn main() {
-    println!("Hello, world!");
+    if let Err(e) = auth::check_auth() {
+        eprintln!("Error: {e}");
+        std::process::exit(1);
+    }
 }
+
