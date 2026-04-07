@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 clap = { version = "4.6.0", features = ["derive"] }
-dialoguer = "0.12.0"
+dialoguer = { version = "0.12.0", features = ["fuzzy-select"] }
 env_logger = "0.11.10"
 log = "0.4.29"
 reqwest = { version = "0.13.2", features = ["json"] }

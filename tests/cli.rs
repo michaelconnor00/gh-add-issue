@@ -1,13 +1,17 @@
 use assert_cmd::Command;
 
-/// Runs the binary as `gh` would — expects exit 0 when the user is
-/// already authenticated in the environment running the test suite.
+/// In a non-TTY test environment the binary passes auth and then fails
+/// cleanly at the interactive selector with a message directing the user
+/// to use --repo instead. We verify: exit is non-zero AND the error is NOT
+/// the auth message — confirming auth succeeded and the process progressed
+/// to the selection stage.
 #[test]
-fn exits_zero_when_authenticated() {
+fn auth_passes_and_selector_fails_gracefully_without_tty() {
     Command::cargo_bin("gh-add-issue")
         .unwrap()
         .assert()
-        .success();
+        .failure()
+        .stderr(predicates::str::contains("requires a terminal"));
 }
 
 /// When GH_TOKEN is set to a deliberately invalid value, `gh auth status`

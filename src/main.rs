@@ -1,5 +1,6 @@
 mod auth;
 mod repos;
+mod select;
 
 fn main() {
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("warn")).init();
@@ -21,7 +22,20 @@ fn main() {
         }
     };
 
-    // Placeholder — repository selection UI (section 3.2) comes next.
     log::info!("Fetched {} repositories.", repo_list.len());
+
+    let selected = match select::select_repo(&repo_list) {
+        Ok(r) => r,
+        Err(e) => {
+            log::error!("{e}");
+            eprintln!("Error: {e}");
+            std::process::exit(1);
+        }
+    };
+
+    log::info!("Selected repository: {selected}");
+
+    // Placeholder — issue input prompts (section 4) come next.
+    println!("Selected: {selected}");
 }
 
